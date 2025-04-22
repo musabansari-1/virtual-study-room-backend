@@ -3,10 +3,9 @@ A collaborative platform for remote study sessions.
 
 ## Setup
 1. Clone: `git clone <repo>`
-2. Backend: `cd virtual-study-room; python -m venv venv; source venv/bin/activate; pip install -r requirements.txt; uvicorn src.main:app --reload`
-3. Frontend: `cd frontend; npm install; npm start`
+2. Run: ` python -m venv venv; Linux: source venv/bin/activate; Windows: venv\Scripts\activate;  pip install -r requirements.txt; uvicorn src.main:app --reload`
 4. Database: SQLite (`studyroom.db`).
-5. Access: `http://localhost:3000`
+5. Access: `http://localhost:8000`
 
 ## APIs
 - `POST /api/auth/register`
