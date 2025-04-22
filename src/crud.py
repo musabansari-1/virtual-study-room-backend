@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from src.models import User, StudyRoom
+from src.models import User, StudyRoom, Message
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -44,3 +44,25 @@ def join_study_room(db: Session, room_id: int, user: User):
         user.study_rooms.append(room)
         db.commit()
     return room
+
+def create_message(db: Session, content: str, room_id: int, user: User):
+    room = get_study_room(db, room_id)
+    if not room or user not in room.users:
+        return None
+    db_message = Message(content=content, user_id=user.id, room_id=room_id)
+    db.add(db_message)
+    db.commit()
+    db.refresh(db_message)
+    return db_message
+
+def get_messages(db: Session, room_id: int):
+    return db.query(Message).filter(Message.room_id == room_id).all()
+
+def delete_study_room(db: Session, room_id: int, user: User):
+    room = db.query(StudyRoom).filter(StudyRoom.id == room_id).first()
+    # if not room or room.creator_id != user.id:
+    if not room:
+        return False
+    db.delete(room)
+    db.commit()
+    return True

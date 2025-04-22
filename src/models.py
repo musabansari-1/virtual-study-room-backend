@@ -1,10 +1,8 @@
-# Import SQLAlchemy types
 from sqlalchemy import Column, Integer, String, Float, JSON, DateTime, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from src.database import Base
 
-# Many-to-many table
 user_study_room = Table(
     'user_study_room',
     Base.metadata,
@@ -12,7 +10,6 @@ user_study_room = Table(
     Column('study_room_id', Integer, ForeignKey('study_rooms.id'))
 )
 
-# User model
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True, index=True)
@@ -28,8 +25,8 @@ class User(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
     study_rooms = relationship('StudyRoom', secondary=user_study_room, back_populates='users')
+    messages = relationship('Message', back_populates='user')
 
-# StudyRoom model
 class StudyRoom(Base):
     __tablename__ = 'study_rooms'
     id = Column(Integer, primary_key=True, index=True)
@@ -37,3 +34,14 @@ class StudyRoom(Base):
     subject = Column(String, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     users = relationship('User', secondary=user_study_room, back_populates='study_rooms')
+    messages = relationship('Message', back_populates='room')
+
+class Message(Base):
+    __tablename__ = 'messages'
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    room_id = Column(Integer, ForeignKey('study_rooms.id'))
+    created_at = Column(DateTime, server_default=func.now())
+    user = relationship('User', back_populates='messages')
+    room = relationship('StudyRoom', back_populates='messages')
