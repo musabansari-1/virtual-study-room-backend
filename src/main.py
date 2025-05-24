@@ -6,6 +6,7 @@ from src.routes.auth import router as auth_router
 from src.routes.study_rooms import router as study_room_router
 from src.routes.chat import router as chat_router
 from src.routes.profile import router as profile_router
+from src.routes.video import router as video_router
 
 # Configure logging
 logger = logging.getLogger()  # Root logger
@@ -39,6 +40,8 @@ app.include_router(auth_router)
 app.include_router(study_room_router)
 app.include_router(chat_router)
 app.include_router(profile_router)
+app.include_router(video_router)
+
 
 @app.get("/")
 async def root():
