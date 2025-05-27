@@ -43,7 +43,7 @@ app.include_router(profile_router)
 app.include_router(video_router)
 
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def root():
     logger.info("Root endpoint accessed")
     return {"message": "Virtual Study Room API"}
